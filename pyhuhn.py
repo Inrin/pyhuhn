@@ -9,9 +9,29 @@ from tkinter import *
 ##############################################################################
 ##                               Definitons                                 ##
 ##############################################################################
+
 def moorhenClicked(event):
     """Kill moorhen"""
+    hideUnderCursor(event.widget)
+
+def hideUnderCursor(canvas):
+    """Hide item under cursor"""
+    canvas.itemconfig(CURRENT, state='hidden')
+
+def destroyAll():
+    """Destroy item under cursor and free memory"""
+    canvasGameWorld.destroy(ALL)
+
+def populateMoorhens():
+    """Generates random moorhens"""
     pass
+
+def run():
+    """main method for animation(Like in Greenfoot)"""
+## Update screen
+    root.update()
+## Execute main method after 100ms
+    root.after(100, run) 
 
 ##############################################################################
 ##                              GUI ~Creation                               ##
@@ -22,41 +42,34 @@ root.title('Pyhuhn')
 root.geometry('1000x600')
 
 ##############################################################################
-##                                 Frames                                   ##
-##############################################################################
-
-frameGameWorld = Frame(master=root, bg='white')
-
-##############################################################################
 ##                                Images                                    ##
 ##############################################################################
 
-imageaMoorhen = []
-#for i in range(7):
-#    imageMoorhen.append(
-#        PhotoImage(file=PATH + IMAGEPREFIX + str(i) + IMAGESUFFIX)
-#   )
+''' Insert your pictures here '''
 
 ##############################################################################
-##                                Labels                                    ##
+##                                 Canvas                                   ##
 ##############################################################################
 
-## Label for prototype moorhen
-labelMoorhen = Label(master=root, text='moorhen', fg='black', bg='gray',
-    font=('Arial', 20))
+canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, 
+        width=1000, height=600)
 
-## Bind label left click
-labelMoorhen.bind('<Button-1>', moorhenClicked)
+## Create a moorhen, for debugging only
+moorhen = canvasGameWorld.create_rectangle(10, 10, 50, 50, fill='gray')
+
+## Binding to mouse, remember: CURRENT == item under cursor
+canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
 
 ##############################################################################
 ##                                Layout                                    ##
 ##############################################################################
 
-## Placing a whole frame on our window
-frameGameWorld.place(x=0, y=0, width=1000, height=600)
-
+## Placing our Canvas  on the window
+canvasGameWorld.pack()
 
 ##############################################################################
 ##                                Starting                                  ##
 ##############################################################################
+
+run()
 root.mainloop()
