@@ -7,9 +7,9 @@
 from tkinter import *
 from random import randint
 
-##############################################################################
-##                               Definitons                                 ##
-##############################################################################
+###############################################################################
+##                                Definitons                                 ##
+###############################################################################
 
 def moorhenClicked(event):
     """Kill moorhen"""
@@ -17,14 +17,18 @@ def moorhenClicked(event):
 
 def hideUnderCursor(canvas):
     """Hide item under cursor"""
+## Hide our victim
     canvas.itemconfig(CURRENT, state='hidden')
+## Remove the `left' or `right' fying tag to stop it
+    canvas.dtag(CURRENT, 'left')
+    canvas.dtag(CURRENT, 'right')
 
 def destroyAll():
     """Destroy item under cursor and free memory"""
     canvasGameWorld.destroy(ALL)
 
 def populateMoorhens(howmany):
-    """Generates random moorhens"""
+    """Generates random moorhens for game init only reuse existing later"""
     moorhens = []
     for i in range(howmany):
         rands = randint(0, 1)
@@ -42,8 +46,20 @@ def populateMoorhens(howmany):
                 )
     return moorhens
 
+def moveMoorhens():
+    """Move Moorhens in a straight line"""
+    for i in range(len(moorhens)):
+## Move them from left -> right
+        if moorhens[i] in canvasGameWorld.find_withtag('left'):
+            canvasGameWorld.move(moorhens[i], 5, 0)
+## Move them from right -> left 
+        elif moorhens[i] in canvasGameWorld.find_withtag('right'):
+            canvasGameWorld.move(moorhens[i], -5, 0)
+
 def run():
     """main method for animation(Like in Greenfoot)"""
+## Let's move it
+    moveMoorhens()
 ## Update screen
     root.update_idletasks()
 ## Execute main method after 100ms
@@ -87,5 +103,7 @@ canvasGameWorld.pack()
 ##                                Starting                                  ##
 ##############################################################################
 
+## Generate 3 Moorhens, first only for debugging
+moorhens = populateMoorhens(3)
 run()
 root.mainloop()
