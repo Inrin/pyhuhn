@@ -5,6 +5,7 @@
 ##############################################################################
 
 from tkinter import *
+from random import randint
 
 ##############################################################################
 ##                               Definitons                                 ##
@@ -22,9 +23,24 @@ def destroyAll():
     """Destroy item under cursor and free memory"""
     canvasGameWorld.destroy(ALL)
 
-def populateMoorhens():
+def populateMoorhens(howmany):
     """Generates random moorhens"""
-    pass
+    moorhens = []
+    for i in range(howmany):
+        rands = randint(0, 1)
+        randy = randint(0, 600)
+        if rands == 0:
+            moorhens.append( 
+                                                #x0, y0,  x1,   y2
+                    canvasGameWorld.create_rectangle(0, randy, 50, randy + 50, 
+                        fill='gray', tags='left')
+                )
+        elif rands == 1:
+            moorhens.append( 
+                        canvasGameWorld.create_rectangle(1000, randy, 950, randy + 50, 
+                            fill='gray', tags='right')
+                )
+    return moorhens
 
 def run():
     """main method for animation(Like in Greenfoot)"""
@@ -55,7 +71,7 @@ canvasGameWorld = Canvas(root, bg='white', closeenough=1.0,
         width=1000, height=600)
 
 ## Create a moorhen, for debugging only
-moorhen = canvasGameWorld.create_rectangle(10, 10, 50, 50, fill='gray')
+moorhen = canvasGameWorld.create_rectangle(0, 50, 50, 100, fill='gray')
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
