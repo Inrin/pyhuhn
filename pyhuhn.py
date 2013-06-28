@@ -29,7 +29,7 @@ def populateMoorhens():
 def run():
     """main method for animation(Like in Greenfoot)"""
 ## Update screen
-    root.update()
+    root.update_idletasks()
 ## Execute main method after 100ms
     root.after(100, run) 
 
