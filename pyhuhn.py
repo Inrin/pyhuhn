@@ -23,7 +23,8 @@ def hideUnderCursor(canvas):
     canvas.dtag(CURRENT, 'left')
     canvas.dtag(CURRENT, 'right')
 ## Add `hidden' tag to specify that it is hidden
-    canvas.addtag('hiiden', 'withtag', CURRENT)
+    canvas.addtag('hidden', 'withtag', CURRENT)
+    print(canvasGameWorld.gettags('hidden'))
 
 def stop(who):
     """Stop who"""
@@ -43,12 +44,19 @@ def hideAndStopEscaped():
             hideAndStop(i)
     
 def hideAndStop(who):
-    """Hide item who"""
+    """Hide item who and stop"""
 ## Hide our victim
     canvasGameWorld.itemconfig(who, state='hidden')
 ## Add `hidden' tag to specify that it is hidden
-    canvasGameWorld.addtag_withtag(who, 'hidden')
+    canvasGameWorld.addtag('hidden', 'withtag', who)
     stop(who)
+
+def unhide(who):
+    """Unhide who"""
+## Unhide our hen
+    canvasGameWorld.itemconfig(who, state='normal')
+## Remove `hidden' tag to specify that it is not hidden
+    canvasGameWorld.dtag(who, 'hidden')
 
 def destroyAll():
     """Destroy item under cursor and free memory"""
@@ -76,7 +84,21 @@ def populateMoorhens(howmany):
 def reviveMoorhens():
     """Revive killed or escaped moorhens"""
 ## Get hidden(killed or escaped moorhens)
-    hiidenMoorhens = canvasGameWorld
+    hiddenMoorhens = canvasGameWorld.find_withtag('hidden')
+    for i in hiddenMoorhens:
+        rands = randint(0, 1)
+        randy = randint(0, 600)
+        if rands == 0:
+## Place it on start
+            canvasGameWorld.coords(i, 0, randy, 50, randy + 50)
+## Make it visible
+            unhide(i)
+## Let it move again
+            canvasGameWorld.addtag('left', 'withtag', i)
+        elif rands == 1:
+            canvasGameWorld.coords(i, 1000, randy, 950, randy + 50)
+            unhide(i)
+            canvasGameWorld.addtag('right', 'withtag', i)
 
 def behindWorldEdge(who):
     """Checks if who is at worlds edge"""
@@ -108,7 +130,10 @@ def moveMoorhens():
 
 def run():
     """main method for animation(Like in Greenfoot)"""
+## Hide and stop moorhens out of world edges
     hideAndStopEscaped()
+## Revive dead and escaped moorhens
+    reviveMoorhens()
 ## Let's move it
     moveMoorhens()
 ## Update screen
@@ -136,9 +161,6 @@ root.geometry('1000x600')
 
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, 
         width=1000, height=600)
-
-## Create a moorhen, for debugging only
-moorhen = canvasGameWorld.create_rectangle(0, 50, 50, 100, fill='gray')
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
