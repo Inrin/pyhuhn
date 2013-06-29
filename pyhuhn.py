@@ -16,23 +16,26 @@ def moorhenClicked(event):
     hideUnderCursor(event.widget)
 
 def hideUnderCursor(canvas):
-    """Hide item under cursor"""
+    """Hide item UNDer cursor"""
 ## Hide our victim
     canvas.itemconfig(CURRENT, state='hidden')
 ## Remove the `left' or `right' fying tag to stop it
     canvas.dtag(CURRENT, 'left')
     canvas.dtag(CURRENT, 'right')
 ## Add `hidden' tag to specify that it is hidden
-    canvas.addtag_withtags(CURRENT, 'hidden')
+    canvas.addtag('hiiden', 'withtag', CURRENT)
 
 def stop(who):
-    """Stop who, if moving"""
+    """Stop who"""
     canvasGameWorld.dtag(who, 'left', 'right')
-    canvasGameWorld.addtag_wittags(who, 'hidde')
     
-def hide(who):
+def hideAndStop(who):
     """Hide item who"""
-    pass
+## Hide our victim
+    canvasGameWorld.itemconfig(who, state='hidden')
+## Add `hidden' tag to specify that it is hidden
+    canvasGameWorld.addtag_withtags(who, 'hidden')
+    stop(who)
 
 def destroyAll():
     """Destroy item under cursor and free memory"""
