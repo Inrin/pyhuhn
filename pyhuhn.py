@@ -27,14 +27,27 @@ def hideUnderCursor(canvas):
 
 def stop(who):
     """Stop who"""
-    canvasGameWorld.dtag(who, 'left', 'right')
+    canvasGameWorld.dtag(who, 'left')
+    canvasGameWorld.dtag(who, 'right')
+
+def hideAndStopEscaped():
+    """hide and stop escaped to save resources"""
+## Abbreviate for better readability
+    find = canvasGameWorld.find_withtag
+## Save left and right flying moorhens
+    movingMoorhens = find('left') + find('right')
+    
+## If behind world, hide and stop
+    for i in movingMoorhens:
+        if behindWorldEdge(i):
+            hideAndStop(i)
     
 def hideAndStop(who):
     """Hide item who"""
 ## Hide our victim
     canvasGameWorld.itemconfig(who, state='hidden')
 ## Add `hidden' tag to specify that it is hidden
-    canvasGameWorld.addtag_withtags(who, 'hidden')
+    canvasGameWorld.addtag_withtag(who, 'hidden')
     stop(who)
 
 def destroyAll():
@@ -59,6 +72,11 @@ def populateMoorhens(howmany):
                             fill='gray', tags='right')
                 )
     return moorhens
+
+def reviveMoorhens():
+    """Revive killed or escaped moorhens"""
+## Get hidden(killed or escaped moorhens)
+    hiidenMoorhens = canvasGameWorld
 
 def behindWorldEdge(who):
     """Checks if who is at worlds edge"""
@@ -90,6 +108,7 @@ def moveMoorhens():
 
 def run():
     """main method for animation(Like in Greenfoot)"""
+    hideAndStopEscaped()
 ## Let's move it
     moveMoorhens()
 ## Update screen
