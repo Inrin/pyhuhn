@@ -90,7 +90,6 @@ def moveMoorhens():
 
 def run():
     """main method for animation(Like in Greenfoot)"""
-    print(atWorldEdge(moorhens[0]))
 ## Let's move it
     moveMoorhens()
 ## Update screen
