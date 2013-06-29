@@ -22,6 +22,17 @@ def hideUnderCursor(canvas):
 ## Remove the `left' or `right' fying tag to stop it
     canvas.dtag(CURRENT, 'left')
     canvas.dtag(CURRENT, 'right')
+## Add `hidden' tag to specify that it is hidden
+    canvas.addtag_withtags(CURRENT, 'hidden')
+
+def stop(who):
+    """Stop who, if moving"""
+    canvasGameWorld.dtag(who, 'left', 'right')
+    canvasGameWorld.addtag_wittags(who, 'hidde')
+    
+def hide(who):
+    """Hide item who"""
+    pass
 
 def destroyAll():
     """Destroy item under cursor and free memory"""
@@ -45,6 +56,11 @@ def populateMoorhens(howmany):
                             fill='gray', tags='right')
                 )
     return moorhens
+
+def atWorldEdge(who):
+    """Checks if who is at worlds edge"""
+    pass    
+    return state
 
 def moveMoorhens():
     """Move Moorhens in a straight line"""
