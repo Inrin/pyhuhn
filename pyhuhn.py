@@ -60,10 +60,23 @@ def populateMoorhens(howmany):
                 )
     return moorhens
 
-def atWorldEdge(who):
+def behindWorldEdge(who):
     """Checks if who is at worlds edge"""
-    pass    
-    return state
+    x0 = canvasGameWorld.coords(moorhens[0])[0]
+    x1 = canvasGameWorld.coords(moorhens[0])[2]
+    y0 = canvasGameWorld.coords(moorhens[0])[1]
+    y1 = canvasGameWorld.coords(moorhens[0])[3]
+
+    if x0 < 0 and x1 < 0:
+        return True
+    elif y0 < 0 and y1 < 0:
+        return True
+    elif x0 > 1000 and x1 > 1000:
+        return True
+    elif y0 > 1000 and y1 > 1000:
+        return True
+    else:
+        return False
 
 def moveMoorhens():
     """Move Moorhens in a straight line"""
@@ -77,6 +90,7 @@ def moveMoorhens():
 
 def run():
     """main method for animation(Like in Greenfoot)"""
+    print(atWorldEdge(moorhens[0]))
 ## Let's move it
     moveMoorhens()
 ## Update screen
