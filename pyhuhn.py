@@ -6,6 +6,8 @@
 
 from tkinter import *
 from random import randint
+## To negate integers
+from operator import neg
 
 ###############################################################################
 ##                                Definitons                                 ##
@@ -24,7 +26,14 @@ def hideUnderCursor(canvas):
     canvas.dtag(CURRENT, 'right')
 ## Add `hidden' tag to specify that it is hidden
     canvas.addtag('hidden', 'withtag', CURRENT)
-    print(canvasGameWorld.gettags('hidden'))
+## For killed got one Hit
+    for i in moorhens:
+        if CURRENT in canvasGameWorld.gettags(i):
+            updateHits()
+            break
+## Executes if for doesn't breaks
+    else:
+        updateMisses()
 
 def stop(who):
     """Stop who"""
@@ -72,12 +81,12 @@ def populateMoorhens(howmany):
             moorhens.append( 
                                                 #x0, y0,  x1,   y2
                     canvasGameWorld.create_rectangle(0, randy, 50, randy + 50, 
-                        fill='gray', tags='left')
+                        fill='gray', tags=('left', 'hen'))
                 )
         elif rands == 1:
             moorhens.append( 
                         canvasGameWorld.create_rectangle(1000, randy, 950, randy + 50, 
-                            fill='gray', tags='right')
+                            fill='gray', tags=('right', 'hen'))
                 )
     return moorhens
 
@@ -128,6 +137,24 @@ def moveMoorhens():
         elif moorhens[i] in canvasGameWorld.find_withtag('right'):
             canvasGameWorld.move(moorhens[i], -5, 0)
 
+def updateHits():
+    """Update the display of hits"""
+## Get current hits, reading text
+    currentHits = canvasGameWorld.itemcget('hits', 'text')
+## Just get the hits suffix -> The ints
+## int = string[afterSpace:toEnd]
+    currentHitsAsInt = int(currentHits[currentHits.index(' ') + 1 :
+        len(currentHits)]) + 1
+## Convert the int back to string
+    canvasGameWorld.itemconfig('hits', text='Hits: ' + str(currentHitsAsInt))
+
+def updateMisses():
+    """Exactly like updateHits, but for misses"""
+    currentHits = canvasGameWorld.itemcget('misses', 'text')
+    currentHitsAsInt = int(currentHits[currentHits.index(' ') + 1 :
+        len(currentHits)]) + 1
+    canvasGameWorld.itemconfig('misses', text='Misses: ' + str(currentHitsAsInt))
+
 def run():
     """main method for animation(Like in Greenfoot)"""
 ## Hide and stop moorhens out of world edges
@@ -164,6 +191,11 @@ canvasGameWorld = Canvas(root, bg='white', closeenough=1.0,
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
+
+## print Hits
+canvasGameWorld.create_text(950, 10, tags='hits', text='Hits: 0') 
+## print Misses
+canvasGameWorld.create_text(850, 10, tags='misses', text='Misses: 0') 
 
 ##############################################################################
 ##                                Layout                                    ##
