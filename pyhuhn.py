@@ -155,6 +155,14 @@ def updateMisses():
         len(currentHits)]) + 1
     canvasGameWorld.itemconfig('misses', text='Misses: ' + str(currentHitsAsInt))
 
+def updateTime():
+    """Updating remaining time"""
+    currentTime = canvasGameWorld.itemcget('time', 'text')
+    currentTimeAsFloat = float(currentTime[currentTime.index(' ') + 1 :
+        len(currentTime)]) - 0.1
+    canvasGameWorld.itemconfig('time', text='Time: ' + str(currentTimeAsFloat))
+
+
 def shot():
     """What to do, if user shots"""
     for i in canvasGameWorld.find_withtag('shell'):
@@ -167,7 +175,6 @@ def shot():
        print('empty. Reload!')
             
 
-
 def reloadGun(event):
     """Reload your shotgun"""
     shells = canvasGameWorld.find_withtag('shell')
@@ -178,6 +185,8 @@ def reloadGun(event):
 
 def run():
     """main method for animation(Like in Greenfoot)"""
+## Update the time
+    updateTime()
 ## Hide and stop moorhens out of world edges
     hideAndStopEscaped()
 ## Revive dead and escaped moorhens
@@ -225,10 +234,11 @@ canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
 canvasGameWorld.bind('<ButtonPress-3>', reloadGun)
 
 ## print Hits
-canvasGameWorld.create_text(950, 10, tags='hits', text='Hits: 0') 
+canvasGameWorld.create_text(850, 10, tags='hits', text='Hits: 0') 
 ## print Misses
-canvasGameWorld.create_text(850, 10, tags='misses', text='Misses: 0') 
-
+canvasGameWorld.create_text(750, 10, tags='misses', text='Misses: 0') 
+## print Time
+canvasGameWorld.create_text(950, 10, tags='time', text='Time: 120') 
 
 ## Place shells
 for i in range(8):
