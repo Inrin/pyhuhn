@@ -192,6 +192,8 @@ if os.name == 'posix':
 ## Not tested yet!
 #elif os.name == 'nt':
 #    CURSOR = '@img/cursor.cur'
+else:
+    CURSOR = None
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
         width=1000, height=600)
 
