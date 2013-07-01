@@ -69,7 +69,7 @@ def unhide(who):
 
 def destroyAll():
     """Destroy item under cursor and free memory"""
-    canvasGameWorld.destroy(ALL)
+    canvasGameWorld.delete(ALL)
 
 def populateMoorhens(howmany):
     """Generates random moorhens for game init only reuse existing later"""
@@ -160,8 +160,20 @@ def updateTime():
     currentTime = canvasGameWorld.itemcget('time', 'text')
     currentTimeAsFloat = float(currentTime[currentTime.index(' ') + 1 :
         len(currentTime)]) - 0.1
-    canvasGameWorld.itemconfig('time', text='Time: ' + str(currentTimeAsFloat))
+    canvasGameWorld.itemconfig('time', text='Time: {:10.2f} '.format(currentTimeAsFloat))
+    gameOver()
 
+def gameOver():
+    """Game over, eh?"""
+    currentTime = canvasGameWorld.itemcget('time', 'text')
+    currentTimeAsFloat = float(currentTime[currentTime.index(' ') + 1 :
+        len(currentTime)])
+    if currentTimeAsFloat <= 0.0:
+        hits = canvasGameWorld.itemcget('hits', 'text')
+        misses = canvasGameWorld.itemcget('misses', 'text')
+        destroyAll()
+        canvasGameWorld.create_text(500, 350, justify=CENTER, 
+                text='Game Over\nHits: ' + hits + '\nMisses: ' + misses)
 
 def shot():
     """What to do, if user shots"""
@@ -238,7 +250,7 @@ canvasGameWorld.create_text(850, 10, tags='hits', text='Hits: 0')
 ## print Misses
 canvasGameWorld.create_text(750, 10, tags='misses', text='Misses: 0') 
 ## print Time
-canvasGameWorld.create_text(950, 10, tags='time', text='Time: 120') 
+canvasGameWorld.create_text(950, 10, tags='time', text='Time: 20') 
 
 ## Place shells
 for i in range(8):
