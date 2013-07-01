@@ -15,7 +15,7 @@ import os
 
 def moorhenClicked(event):
     """Kill moorhen"""
-    hideUnderCursor(event.widget)
+    shot()
 
 def hideUnderCursor(canvas):
     """Hide item UNDer cursor"""
@@ -76,7 +76,7 @@ def populateMoorhens(howmany):
     moorhens = []
     for i in range(howmany):
         rands = randint(0, 1)
-        randy = randint(0, 600)
+        randy = randint(0, 500)
         if rands == 0:
             moorhens.append( 
                                                 #x0, y0,  x1,   y2
@@ -155,6 +155,27 @@ def updateMisses():
         len(currentHits)]) + 1
     canvasGameWorld.itemconfig('misses', text='Misses: ' + str(currentHitsAsInt))
 
+def shot():
+    """What to do, if user shots"""
+    for i in canvasGameWorld.find_withtag('shell'):
+        if 'empty' not in canvasGameWorld.gettags(i):
+            canvasGameWorld.itemconfig(i, state='hidden')
+            canvasGameWorld.addtag('empty', 'withtag', i)
+            hideUnderCursor(canvasGameWorld)
+            break
+    else:
+       print('empty. Reload!')
+            
+
+
+def reloadGun(event):
+    """Reload your shotgun"""
+    shells = canvasGameWorld.find_withtag('shell')
+    if len(shells) == len(canvasGameWorld.find_withtag('empty')):
+        for i in shells:
+            canvasGameWorld.itemconfig(i, state='normal')
+            canvasGameWorld.dtag(i, 'empty')
+
 def run():
     """main method for animation(Like in Greenfoot)"""
 ## Hide and stop moorhens out of world edges
@@ -174,13 +195,13 @@ def run():
 
 root = Tk()
 root.title('Pyhuhn')
-root.geometry('1000x600')
+root.geometry('1000x700')
 
 ##############################################################################
 ##                                Images                                    ##
 ##############################################################################
 
-''' Insert your pictures here '''
+imageShell = PhotoImage(file='img/shell.png')
 
 ##############################################################################
 ##                                 Canvas                                   ##
@@ -195,15 +216,24 @@ if os.name == 'posix':
 else:
     CURSOR = None
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
-        width=1000, height=600)
+        width=1000, height=700)
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
+
+## Binding to right mouse button
+canvasGameWorld.bind('<ButtonPress-3>', reloadGun)
 
 ## print Hits
 canvasGameWorld.create_text(950, 10, tags='hits', text='Hits: 0') 
 ## print Misses
 canvasGameWorld.create_text(850, 10, tags='misses', text='Misses: 0') 
+
+
+## Place shells
+for i in range(8):
+    canvasGameWorld.create_image(720 + (i*35), 650, image=imageShell,
+                    tags='shell')
 
 ##############################################################################
 ##                                Layout                                    ##
