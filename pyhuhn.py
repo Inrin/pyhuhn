@@ -79,14 +79,13 @@ def populateMoorhens(howmany):
         randy = randint(0, 500)
         if rands == 0:
             moorhens.append( 
-                                                #x0, y0,  x1,   y2
-                    canvasGameWorld.create_rectangle(0, randy, 50, randy + 50, 
-                        fill='gray', tags=('left', 'hen'))
+                    canvasGameWorld.create_image(50, randy,
+                        image=imageMoorhenLeft, tags=('left', 'hen'))
                 )
         elif rands == 1:
             moorhens.append( 
-                        canvasGameWorld.create_rectangle(1000, randy, 950, randy + 50, 
-                            fill='gray', tags=('right', 'hen'))
+                        canvasGameWorld.create_image(950, randy, 
+                            image=imageMoorhenRight, tags=('right', 'hen'))
                 )
     return moorhens
 
@@ -99,30 +98,30 @@ def reviveMoorhens():
         randy = randint(0, 600)
         if rands == 0:
 ## Place it on start
-            canvasGameWorld.coords(i, 0, randy, 50, randy + 50)
+            canvasGameWorld.coords(i, 50, randy)
 ## Make it visible
             unhide(i)
 ## Let it move again
             canvasGameWorld.addtag('left', 'withtag', i)
+            canvasGameWorld.itemconfig(i, image=imageMoorhenLeft)
         elif rands == 1:
-            canvasGameWorld.coords(i, 1000, randy, 950, randy + 50)
+            canvasGameWorld.coords(i, 950, randy)
             unhide(i)
             canvasGameWorld.addtag('right', 'withtag', i)
+            canvasGameWorld.itemconfig(i, image=imageMoorhenRight)
 
 def behindWorldEdge(who):
     """Checks if who is at worlds edge"""
     x0 = canvasGameWorld.coords(moorhens[0])[0]
-    x1 = canvasGameWorld.coords(moorhens[0])[2]
     y0 = canvasGameWorld.coords(moorhens[0])[1]
-    y1 = canvasGameWorld.coords(moorhens[0])[3]
 
-    if x0 < 0 and x1 < 0:
+    if x0 < 0:
         return True
-    elif y0 < 0 and y1 < 0:
+    elif y0 < 0:
         return True
-    elif x0 > 1000 and x1 > 1000:
+    elif x0 > 1000 :
         return True
-    elif y0 > 1000 and y1 > 1000:
+    elif y0 > 1000:
         return True
     else:
         return False
@@ -223,6 +222,8 @@ root.geometry('1000x700')
 ##############################################################################
 
 imageShell = PhotoImage(file='img/shell.png')
+imageMoorhenLeft = PhotoImage(file='img/hen_left.png')
+imageMoorhenRight = PhotoImage(file='img/hen_right.png')
 
 ##############################################################################
 ##                                 Canvas                                   ##
