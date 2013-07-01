@@ -6,8 +6,6 @@
 
 from tkinter import *
 from random import randint
-## To negate integers
-from operator import neg
 
 ###############################################################################
 ##                                Definitons                                 ##
