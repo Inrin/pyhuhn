@@ -247,6 +247,6 @@ canvasGameWorld.pack()
 ##############################################################################
 
 ## Generate 3 Moorhens, first only for debugging
-moorhens = populateMoorhens(3)
+moorhens = populateMoorhens(5)
 run()
 root.mainloop()
