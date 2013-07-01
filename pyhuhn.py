@@ -6,6 +6,8 @@
 
 from tkinter import *
 from random import randint
+## Get OS
+import os
 
 ###############################################################################
 ##                                Definitons                                 ##
@@ -184,7 +186,13 @@ root.geometry('1000x600')
 ##                                 Canvas                                   ##
 ##############################################################################
 
-canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, 
+## Specify custom cursor for posix and windows
+if os.name == 'posix':
+    CURSOR = ('@img/cursor.xbm', 'img/cursor-mask.xbm', 'black', 'white')
+## Not tested yet!
+elif os.name == 'nt':
+    CURSOR = '@img/cursor.cur'
+canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
         width=1000, height=600)
 
 ## Binding to mouse, remember: CURRENT == item under cursor
