@@ -18,14 +18,15 @@ def moorhenClicked(event):
     shot()
 
 def hideUnderCursor(canvas):
-    """Hide item UNDer cursor"""
+    """Hide item Under cursor"""
+    if 'hen' in canvas.gettags(CURRENT):
 ## Hide our victim
-    canvas.itemconfig(CURRENT, state='hidden')
+        canvas.itemconfig(CURRENT, state='hidden')
 ## Remove the `left' or `right' fying tag to stop it
-    canvas.dtag(CURRENT, 'left')
-    canvas.dtag(CURRENT, 'right')
+        canvas.dtag(CURRENT, 'left')
+        canvas.dtag(CURRENT, 'right')
 ## Add `hidden' tag to specify that it is hidden
-    canvas.addtag('hidden', 'withtag', CURRENT)
+        canvas.addtag('hidden', 'withtag', CURRENT)
 ## For killed got one Hit
     for i in moorhens:
         if CURRENT in canvasGameWorld.gettags(i):
@@ -79,12 +80,12 @@ def populateMoorhens(howmany):
         randy = randint(0, 500)
         if rands == 0:
             moorhens.append( 
-                    canvasGameWorld.create_image(50, randy,
+                    canvasGameWorld.create_image(0, randy,
                         image=imageMoorhenLeft, tags=('left', 'hen'))
                 )
         elif rands == 1:
             moorhens.append( 
-                        canvasGameWorld.create_image(950, randy, 
+                        canvasGameWorld.create_image(1200, randy, 
                             image=imageMoorhenRight, tags=('right', 'hen'))
                 )
     return moorhens
@@ -96,16 +97,17 @@ def reviveMoorhens():
     for i in hiddenMoorhens:
         rands = randint(0, 1)
         randy = randint(0, 600)
+        randt = randint(0, 100)
         if rands == 0:
 ## Place it on start
-            canvasGameWorld.coords(i, 50, randy)
+            canvasGameWorld.coords(i, 0 - randt, randy)
 ## Make it visible
             unhide(i)
 ## Let it move again
             canvasGameWorld.addtag('left', 'withtag', i)
             canvasGameWorld.itemconfig(i, image=imageMoorhenLeft)
         elif rands == 1:
-            canvasGameWorld.coords(i, 950, randy)
+            canvasGameWorld.coords(i, 1200 + randt, randy)
             unhide(i)
             canvasGameWorld.addtag('right', 'withtag', i)
             canvasGameWorld.itemconfig(i, image=imageMoorhenRight)
@@ -115,13 +117,13 @@ def behindWorldEdge(who):
     x0 = canvasGameWorld.coords(moorhens[0])[0]
     y0 = canvasGameWorld.coords(moorhens[0])[1]
 
-    if x0 < 0:
+    if x0 < -100:
         return True
-    elif y0 < 0:
+    elif y0 < -100:
         return True
-    elif x0 > 1000 :
+    elif x0 > 1300 :
         return True
-    elif y0 > 1000:
+    elif y0 > 1300:
         return True
     else:
         return False
@@ -159,7 +161,7 @@ def updateTime():
     currentTime = canvasGameWorld.itemcget('time', 'text')
     currentTimeAsFloat = float(currentTime[currentTime.index(' ') + 1 :
         len(currentTime)]) - 0.1
-    canvasGameWorld.itemconfig('time', text='Time: {:10.2f} '.format(currentTimeAsFloat))
+    canvasGameWorld.itemconfig('time', text='Time:{:7.2f} '.format(currentTimeAsFloat))
     gameOver()
 
 def gameOver():
@@ -215,7 +217,7 @@ def run():
 
 root = Tk()
 root.title('Pyhuhn')
-root.geometry('1000x700')
+root.geometry('1200x600')
 ## Posix path `/'
 if os.name == 'posix':
     PATH = 'img/'
@@ -230,6 +232,10 @@ elif os.name == 'nt':
 imageShell = PhotoImage(file=PATH + 'shell.gif')
 imageMoorhenLeft = PhotoImage(file=PATH + 'hen_left.gif')
 imageMoorhenRight = PhotoImage(file=PATH + 'hen_right.gif')
+imageBackgroundSky = PhotoImage(file=PATH + 'backgroundSky.gif')
+imageBackgroundMill =  PhotoImage(file=PATH + 'backgroundMill.gif')
+imageBackgroundCastle =  PhotoImage(file=PATH + 'backgroundCastle.gif')
+imageBackgroundHills =  PhotoImage(file=PATH + 'backgroundHills.gif')
 
 ##############################################################################
 ##                                 Canvas                                   ##
@@ -243,25 +249,36 @@ elif os.name == 'nt':
 else:
     CURSOR = None
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
-        width=1000, height=700)
+        width=1200, height=600)
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
-
 ## Binding to right mouse button
 canvasGameWorld.bind('<ButtonPress-3>', reloadGun)
 
-## print Hits
-canvasGameWorld.create_text(850, 10, tags='hits', text='Hits: 0') 
-## print Misses
-canvasGameWorld.create_text(750, 10, tags='misses', text='Misses: 0') 
-## print Time
-canvasGameWorld.create_text(950, 10, tags='time', text='Time: 120') 
+## Fly in the sky
+canvasGameWorld.create_image(200, 200, image=imageBackgroundSky)
+
+## Some nice hills in the back ;)
+canvasGameWorld.create_image(700, 300, image=imageBackgroundHills)
+
+## A castle in the back
+canvasGameWorld.create_image(980, 300, image=imageBackgroundCastle)
+
+## a nice mill and field
+canvasGameWorld.create_image(110, 310, image=imageBackgroundMill)
 
 ## Place shells
 for i in range(8):
-    canvasGameWorld.create_image(720 + (i*35), 650, image=imageShell,
+    canvasGameWorld.create_image(900 + (i*35), 550, image=imageShell,
                     tags='shell')
+
+## print Misses
+canvasGameWorld.create_text(990, 10, tags='misses', text='Misses: 0') 
+## print Hits
+canvasGameWorld.create_text(1060, 10, tags='hits', text='Hits: 0') 
+## print Time
+canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 120') 
 
 ##############################################################################
 ##                                Layout                                    ##
