@@ -173,8 +173,18 @@ def gameOver():
         hits = canvasGameWorld.itemcget('hits', 'text')
         misses = canvasGameWorld.itemcget('misses', 'text')
         destroyAll()
-        canvasGameWorld.create_text(600, 350, justify=CENTER, 
-                text='Game Over\n' + hits + '\n' + misses)
+        drawOutro(hits, misses)
+
+def drawOutro(hits, misses):
+    """Guess what"""
+    canvasGameWorld.create_text(600, 350, justify=CENTER, 
+    text='Game Over\n' + hits + '\n' + misses + '\nRestart (Y/N)?')
+    root.bind('<n>', quit)
+    root.bind('<N>', quit)
+    root.bind('<q>', quit)
+    root.bind('<Q>', quit)
+    root.bind('<Escape>', quit)
+    root.bind('<Control-q>', quit)
 
 def shot():
     """What to do, if user shots"""
@@ -211,6 +221,10 @@ def run():
 ## Execute main method after 100ms
     root.after(100, run) 
 
+def quit(event):
+    """Quit this application"""
+    root.quit()
+
 ##############################################################################
 ##                              GUI ~Creation                               ##
 ##############################################################################
@@ -236,6 +250,7 @@ imageBackgroundSky = PhotoImage(file=PATH + 'backgroundSky.gif')
 imageBackgroundMill =  PhotoImage(file=PATH + 'backgroundMill.gif')
 imageBackgroundCastle =  PhotoImage(file=PATH + 'backgroundCastle.gif')
 imageBackgroundHills =  PhotoImage(file=PATH + 'backgroundHills.gif')
+imagePumpkin = PhotoImage(file=PATH + 'pumpkin.gif')
 
 ##############################################################################
 ##                                 Canvas                                   ##
@@ -273,12 +288,15 @@ for i in range(8):
     canvasGameWorld.create_image(900 + (i*35), 550, image=imageShell,
                     tags='shell')
 
+## The popular pumpin returns!
+canvasGameWorld.create_image(820, 400, image=imagePumpkin)
+
 ## print Misses
 canvasGameWorld.create_text(990, 10, tags='misses', text='Misses: 0') 
 ## print Hits
 canvasGameWorld.create_text(1060, 10, tags='hits', text='Hits: 0') 
 ## print Time
-canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 120') 
+canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 1') 
 
 ##############################################################################
 ##                                Layout                                    ##
