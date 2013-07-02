@@ -227,9 +227,9 @@ elif os.name == 'nt':
 ##                                Images                                    ##
 ##############################################################################
 
-imageShell = PhotoImage(file=PATH + 'shell.png')
-imageMoorhenLeft = PhotoImage(file=PATH + 'hen_left.png')
-imageMoorhenRight = PhotoImage(file=PATH + 'hen_right.png')
+imageShell = PhotoImage(file=PATH + 'shell.gif')
+imageMoorhenLeft = PhotoImage(file=PATH + 'hen_left.gif')
+imageMoorhenRight = PhotoImage(file=PATH + 'hen_right.gif')
 
 ##############################################################################
 ##                                 Canvas                                   ##
