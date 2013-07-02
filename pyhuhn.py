@@ -239,7 +239,7 @@ imageMoorhenRight = PhotoImage(file=PATH + 'hen_right.gif')
 if os.name == 'posix':
     CURSOR = ('@img/cursor.xbm', 'img/cursor-mask.xbm', 'black', 'white')
 elif os.name == 'nt':
-    CURSOR = '@img\cursor.cur'
+    CURSOR = '@img/cursor.cur'
 else:
     CURSOR = None
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
