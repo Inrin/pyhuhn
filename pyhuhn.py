@@ -173,7 +173,7 @@ def gameOver():
         hits = canvasGameWorld.itemcget('hits', 'text')
         misses = canvasGameWorld.itemcget('misses', 'text')
         destroyAll()
-        canvasGameWorld.create_text(500, 350, justify=CENTER, 
+        canvasGameWorld.create_text(600, 350, justify=CENTER, 
                 text='Game Over\n' + hits + '\n' + misses)
 
 def shot():
