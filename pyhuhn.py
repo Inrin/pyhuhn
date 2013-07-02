@@ -172,7 +172,7 @@ def gameOver():
         misses = canvasGameWorld.itemcget('misses', 'text')
         destroyAll()
         canvasGameWorld.create_text(500, 350, justify=CENTER, 
-                text='Game Over\nHits: ' + hits + '\nMisses: ' + misses)
+                text='Game Over\n' + hits + '\n' + misses)
 
 def shot():
     """What to do, if user shots"""
@@ -216,14 +216,20 @@ def run():
 root = Tk()
 root.title('Pyhuhn')
 root.geometry('1000x700')
+## Posix path `/'
+if os.name == 'posix':
+    PATH = 'img/'
+## Windows Path `\'
+elif os.name == 'nt':
+    PATH = 'img\\'
 
 ##############################################################################
 ##                                Images                                    ##
 ##############################################################################
 
-imageShell = PhotoImage(file='img/shell.png')
-imageMoorhenLeft = PhotoImage(file='img/hen_left.png')
-imageMoorhenRight = PhotoImage(file='img/hen_right.png')
+imageShell = PhotoImage(file=PATH + 'shell.png')
+imageMoorhenLeft = PhotoImage(file=PATH + 'hen_left.png')
+imageMoorhenRight = PhotoImage(file=PATH + 'hen_right.png')
 
 ##############################################################################
 ##                                 Canvas                                   ##
@@ -232,9 +238,8 @@ imageMoorhenRight = PhotoImage(file='img/hen_right.png')
 ## Specify custom cursor for posix and windows
 if os.name == 'posix':
     CURSOR = ('@img/cursor.xbm', 'img/cursor-mask.xbm', 'black', 'white')
-## Not tested yet!
-#elif os.name == 'nt':
-#    CURSOR = '@img/cursor.cur'
+elif os.name == 'nt':
+    CURSOR = '@img\cursor.cur'
 else:
     CURSOR = None
 canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
@@ -251,7 +256,7 @@ canvasGameWorld.create_text(850, 10, tags='hits', text='Hits: 0')
 ## print Misses
 canvasGameWorld.create_text(750, 10, tags='misses', text='Misses: 0') 
 ## print Time
-canvasGameWorld.create_text(950, 10, tags='time', text='Time: 20') 
+canvasGameWorld.create_text(950, 10, tags='time', text='Time: 120') 
 
 ## Place shells
 for i in range(8):
