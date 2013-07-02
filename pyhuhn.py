@@ -185,6 +185,10 @@ def drawOutro(hits, misses):
     root.bind('<Q>', quit)
     root.bind('<Escape>', quit)
     root.bind('<Control-q>', quit)
+    root.bind('<y>', gameInit)
+    root.bind('<Y>', gameInit)
+    root.bind('<Return>', gameInit)
+    root.bind('<space>', gameInit)
 
 def shot():
     """What to do, if user shots"""
@@ -196,7 +200,6 @@ def shot():
             break
     else:
        print('empty. Reload!')
-            
 
 def reloadGun(event):
     """Reload your shotgun"""
@@ -221,6 +224,62 @@ def run():
 ## Execute main method after 100ms
     root.after(100, run) 
 
+def gameInit(event):
+    """All the stuff to be done"""
+    global moorhens
+    canvasGameWorld.delete(ALL)
+    
+## Fly in the sky
+    canvasGameWorld.create_image(200, 200, image=imageBackgroundSky)
+
+## Some nice hills in the back ;)
+    canvasGameWorld.create_image(700, 300, image=imageBackgroundHills)
+
+## A castle in the back
+    canvasGameWorld.create_image(980, 300, image=imageBackgroundCastle)
+
+## a nice mill and field
+    canvasGameWorld.create_image(110, 310, image=imageBackgroundMill)
+
+## Place shells
+    for i in range(8):
+        canvasGameWorld.create_image(900 + (i*35), 550, image=imageShell,
+                        tags='shell')
+
+## The popular pumpin returns!
+    canvasGameWorld.create_image(820, 400, image=imagePumpkin)
+
+## print Misses
+    canvasGameWorld.create_text(990, 10, tags='misses', text='Misses: 0') 
+## print Hits
+    canvasGameWorld.create_text(1060, 10, tags='hits', text='Hits: 0') 
+## print Time
+    canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 1') 
+## Populate our lovely hens
+    moorhens = populateMoorhens(5)
+
+## Unbind <Key> to not let the user start endless games
+    root.unbind('<space>')
+    root.unbind('<y>')
+    root.unbind('<Y>')
+    root.unbind('<Return>')
+    root.unbind('<Button-1>')
+    root.unbind('<space>')
+    root.unbind('<n>')
+    root.unbind('<N>')
+    root.unbind('<q>')
+    root.unbind('<Q>')
+    root.unbind('<Escape>')
+    root.unbind('<Control-q>')
+
+## After preperations, start main gameloop
+    run()
+
+def drawIntro():
+    """Make a nice Intro, someday"""
+    canvasGameWorld.create_text(500, 500, text='Haha')
+    root.bind('<space>', gameInit) 
+
 def quit(event):
     """Quit this application"""
     root.quit()
@@ -238,6 +297,8 @@ if os.name == 'posix':
 ## Windows Path `\'
 elif os.name == 'nt':
     PATH = 'img\\'
+
+moorhens = []
 
 ##############################################################################
 ##                                Images                                    ##
@@ -271,32 +332,6 @@ canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
 ## Binding to right mouse button
 canvasGameWorld.bind('<ButtonPress-3>', reloadGun)
 
-## Fly in the sky
-canvasGameWorld.create_image(200, 200, image=imageBackgroundSky)
-
-## Some nice hills in the back ;)
-canvasGameWorld.create_image(700, 300, image=imageBackgroundHills)
-
-## A castle in the back
-canvasGameWorld.create_image(980, 300, image=imageBackgroundCastle)
-
-## a nice mill and field
-canvasGameWorld.create_image(110, 310, image=imageBackgroundMill)
-
-## Place shells
-for i in range(8):
-    canvasGameWorld.create_image(900 + (i*35), 550, image=imageShell,
-                    tags='shell')
-
-## The popular pumpin returns!
-canvasGameWorld.create_image(820, 400, image=imagePumpkin)
-
-## print Misses
-canvasGameWorld.create_text(990, 10, tags='misses', text='Misses: 0') 
-## print Hits
-canvasGameWorld.create_text(1060, 10, tags='hits', text='Hits: 0') 
-## print Time
-canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 1') 
 
 ##############################################################################
 ##                                Layout                                    ##
@@ -309,7 +344,6 @@ canvasGameWorld.pack()
 ##                                Starting                                  ##
 ##############################################################################
 
-## Generate 3 Moorhens, first only for debugging
-moorhens = populateMoorhens(5)
-run()
+drawIntro()
+## main GUI loop
 root.mainloop()
