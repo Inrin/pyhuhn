@@ -177,8 +177,18 @@ def gameOver():
 
 def drawOutro(hits, misses):
     """Guess what"""
-    canvasGameWorld.create_text(600, 350, justify=CENTER, 
-    text='Game Over\n' + hits + '\n' + misses + '\nRestart (Y/N)?')
+    FONTSIZE=22
+    FONT='Arial'
+    canvasGameWorld.create_image(600, 300, image=imageOutro) 
+    canvasGameWorld.create_text(600, 150, text='Game Over',
+            font=(FONT, FONTSIZE))
+    canvasGameWorld.create_text(400, 300, text=hits,
+            font=(FONT, FONTSIZE))
+    canvasGameWorld.create_text(800, 300, text=misses,
+            font=(FONT, FONTSIZE))
+    canvasGameWorld.create_text(600, 450, text='Restart (Y/N)?',
+            font=(FONT, FONTSIZE))
+
     root.bind('<n>', quit)
     root.bind('<N>', quit)
     root.bind('<q>', quit)
@@ -277,8 +287,23 @@ def gameInit(event):
 
 def drawIntro():
     """Make a nice Intro, someday"""
-    canvasGameWorld.create_text(500, 500, text='Haha')
-    root.bind('<space>', gameInit) 
+    canvasGameWorld.create_image(600, 300, image=imageIntro)
+    start = canvasGameWorld.create_image(600, 300, image=imageStartNormal)
+    exit = canvasGameWorld.create_image(865, 300, image=imageExitNormal)
+
+    canvasGameWorld.tag_bind(start, '<Button-1>',  gameInit)
+    canvasGameWorld.tag_bind(start, '<Enter>',  lambda event:(
+            canvasGameWorld.itemconfig(start, image=imageStartHighlight)))
+    canvasGameWorld.tag_bind(start, '<Leave>',  lambda event:(
+            canvasGameWorld.itemconfig(start, image=imageStartNormal)))
+
+    canvasGameWorld.tag_bind(exit, '<Button-1>',  quit)
+    canvasGameWorld.tag_bind(exit, '<Enter>',  lambda event:(
+            canvasGameWorld.itemconfig(exit, image=imageExitHighlight)))
+    canvasGameWorld.tag_bind(exit, '<Leave>',  lambda event:(
+            canvasGameWorld.itemconfig(exit, image=imageExitNormal)))
+
+    root.bind('<Return>', gameInit)
 
 def quit(event):
     """Quit this application"""
@@ -312,6 +337,14 @@ imageBackgroundMill =  PhotoImage(file=PATH + 'backgroundMill.gif')
 imageBackgroundCastle =  PhotoImage(file=PATH + 'backgroundCastle.gif')
 imageBackgroundHills =  PhotoImage(file=PATH + 'backgroundHills.gif')
 imagePumpkin = PhotoImage(file=PATH + 'pumpkin.gif')
+imageIntro = PhotoImage(file=PATH + 'intro.gif')
+imageOutro = PhotoImage(file=PATH + 'outro.gif')
+imageStartNormal = PhotoImage(file=PATH + 'startNormal.gif')
+imageStartHighlight = PhotoImage(file=PATH + 'startHighlight.gif')
+imageStartPress = PhotoImage(file=PATH + 'startPress.gif')
+imageExitNormal = PhotoImage(file=PATH + 'exitNormal.gif')
+imageExitHighlight = PhotoImage(file=PATH + 'exitHighlight.gif')
+imageExitPress = PhotoImage(file=PATH + 'exitPress.gif')
 
 ##############################################################################
 ##                                 Canvas                                   ##
@@ -324,14 +357,13 @@ elif os.name == 'nt':
     CURSOR = '@img/cursor.cur'
 else:
     CURSOR = None
-canvasGameWorld = Canvas(root, bg='white', closeenough=1.0, cursor=CURSOR,
+canvasGameWorld = Canvas(root, bg='#540302', closeenough=1.0, cursor=CURSOR,
         width=1200, height=600)
 
 ## Binding to mouse, remember: CURRENT == item under cursor
 canvasGameWorld.bind('<ButtonPress-1>', moorhenClicked)
 ## Binding to right mouse button
 canvasGameWorld.bind('<ButtonPress-3>', reloadGun)
-
 
 ##############################################################################
 ##                                Layout                                    ##
