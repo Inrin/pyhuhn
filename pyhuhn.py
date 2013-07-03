@@ -264,7 +264,7 @@ def gameInit(event):
 ## print Hits
     canvasGameWorld.create_text(1060, 10, tags='hits', text='Hits: 0') 
 ## print Time
-    canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 1') 
+    canvasGameWorld.create_text(1150, 10, tags='time', text='Time: 120') 
 ## Populate our lovely hens
     moorhens = populateMoorhens(5)
 
