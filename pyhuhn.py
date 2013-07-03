@@ -210,6 +210,7 @@ def shot():
             break
     else:
        print('empty. Reload!')
+       print('\a')
 
 def reloadGun(event):
     """Reload your shotgun"""
